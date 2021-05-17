@@ -14,16 +14,23 @@ def get_valid_word(title):
     word = random.choice(title)  # randomly chooses something from the list
     while '-' in word or ' ' in word or '!' in word or '?' in word:
         word = random.choice(title)
-    
     return word
 
+def show_poster(url):
+    root = tk.Tk()
+    response = requests.get(url)
+    img_data = response.content
+    img = ImageTk.PhotoImage(Image.open(BytesIO(img_data)))
+    panel = tk.Label(root, image=img)
+    panel.pack(side="bottom", fill="both", expand="yes")
+    root.mainloop()
 
 def hangman():
     word = get_valid_word(title)
     index = title.index(word)
     url = poster[index]
     word=word.upper()
-    # print(word)    
+    print(word)    
     # print(index)
     # print(url)
     word_letters = set(word)  # letters in the word
@@ -66,13 +73,7 @@ def hangman():
         print('You died, sorry. The movie was', word)
     else:
         print('YAY! You guessed the movie', word, '!!')
-    root = tk.Tk()
-    response = requests.get(url)
-    img_data = response.content
-    img = ImageTk.PhotoImage(Image.open(BytesIO(img_data)))
-    panel = tk.Label(root, image=img)
-    panel.pack(side="bottom", fill="both", expand="yes")
-    root.mainloop()
+    show_poster(url)
 
 if __name__ == '__main__':
     hangman()
